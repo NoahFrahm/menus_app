@@ -3,6 +3,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,6 +19,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
+//import json
+//import java.util.Map;
+//import org.json.simple.JSONObject;
 
 
 
@@ -27,7 +31,7 @@ public class Main {
         // Http Builder
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDateTime now = LocalDateTime.now();
-        String  date = dtf.format(now);
+        String date = dtf.format(now);
 
 
         System.out.println(dtf.format(now));
@@ -83,29 +87,30 @@ public class Main {
                 i += 1;
             }
         }
+//        here we convert our map to json
 
-        System.out.println(map);
-        for (String key : map.keySet()) {
-//            System.out.println("Today at " + key + " we have:");
-            System.out.println(map.get(key));
+//        System.out.println(map);
+        JSONObject json =  new JSONObject(map);
+        System.out.println(json);
 
-
-            for (String locations : map.get(key).keySet()) {
-                ArrayList times = map.get(key).get(locations);
-//                System.out.println(locations);
-
-//                System.out.println(times);
-
-                for (int i = 0; i < times.size(); i++) {
-//                    ArrayList<String> hours  = times.get(i);
-                    System.out.println(locations + " open for "  + times.get(i) + "from " + times.get(i) + " to " + times.get(i));
-                }
-//                System.out.println(map.get(key).get(locations));
-                }
-
-            }
+//        this code prints out the map in formatted style
+//        for (String key : map.keySet()) {
+////            System.out.println("Today at " + key + " we have:");
+////            System.out.println(map.get(key));
+//
+//            for (String locations : map.get(key).keySet()) {
+//                ArrayList<ArrayList<String>> times = map.get(key).get(locations);
+////                System.out.println(locations);
+////                System.out.println(times);
+//
+//                for (int i = 0; i < times.size(); i++) {
+//                    ArrayList<String> hours = times.get(i);
+////                    times.get(i);
+//                    System.out.println(locations + " open for " + hours.get(0) + " from " + hours.get(1) + " to " + hours.get(2));
+//                }
+//            }
+//
 //        }
-
     }
 }
 
