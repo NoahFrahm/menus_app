@@ -26,6 +26,8 @@ public class GetMenus {
     //    private final JSONObject json;
     private final String url;
     HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>> map = new HashMap<>();
+//    HashMap<String, ArrayList<ArrayList<String>> stationsDishes = new HashMap<>();
+
     private ArrayList<String> mealPeriods = new ArrayList<>();
     //    make hashmap to store all unique stations
     private ArrayList<String> openStations = new ArrayList<>();
@@ -69,11 +71,12 @@ public class GetMenus {
         Elements openStations = doc.getElementsByClass("c-tab");
 //        this works, we are able to access active data
 //        Elements mealPeriods = doc.getElementsByClass("c-tabs-nav__link is-active");
-        Elements mealPeriods = doc.getElementsByClass("c-tabs-nav__link");
+        Elements mealPeriodss = doc.getElementsByClass("c-tabs-nav__link");
 
 //      gets the meal periods for this venue
-        for (Element mealPeriod : mealPeriods) {
+        for (Element mealPeriod : mealPeriodss) {
             Elements mealPeriodName = mealPeriod.getElementsByClass("c-tabs-nav__link-inner");
+            mealPeriods.add(mealPeriodName.text());
 //            System.out.println(mealPeriodName.text());
 //            System.out.println(venue);
 //            System.out.println("done");
@@ -81,32 +84,27 @@ public class GetMenus {
 
 //      gets the stations open during different meal periods for this venue
         for (Element station : openStations) {
-//            System.out.println(station.text());
-
             System.out.println(" ");
-
             Elements allStation = station.getElementsByClass("menu-station");
 
-//            System.out.println(entireStation);
-//            System.out.println(station);
-//            System.out.println(stationName);
-
 //          prints stations for the 6 differnt meal times and the dishes they currently have
+            HashMap<String, ArrayList<String>> stationsDishes = new HashMap<>();
             for (Element thing : allStation) {
                 Elements stationNames = thing.select("h4");
                 Elements dishNames = thing.select("a");
-                System.out.println(" ");
-                System.out.println(stationNames.text());
-                System.out.println(" ");
+//                System.out.println(" ");
+//                System.out.println(stationNames.text());
+                stationsDishes.put(stationNames.text(),new ArrayList<String>());
+//                System.out.println(" ");
 
-                for (Element dish : dishNames){
-                    System.out.println(dish.text());
+                for (Element dish : dishNames) {
+                    stationsDishes.get(stationNames.text()).add(dish.text());
+//                    System.out.println(dish.text());
                 }
             }
+            System.out.println(stationsDishes);
             System.out.println(" ");
-
         }
-
     }
 }
 
