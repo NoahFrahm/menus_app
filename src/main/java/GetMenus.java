@@ -3,7 +3,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,96 +22,92 @@ import java.util.stream.Collectors;
 public class GetMenus {
 
     private final String date;
-    private final JSONObject json;
+    private final String location;
+    //    private final JSONObject json;
     private final String url;
     HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>> map = new HashMap<>();
-    private ArrayList<String> venues = new ArrayList<>();
-    private ArrayList<String> restaurants = new ArrayList<>();
+    private ArrayList<String> mealPeriods = new ArrayList<>();
+    //    make hashmap to store all unique stations
+    private ArrayList<String> openStations = new ArrayList<>();
 
-//    hard coded url for menus at different locations, menus may only be possible for chase and lenoir
-
-    public GetMenus(boolean chase) throws IOException {
-        this(DateTimeFormatter.ofPattern("yyyy/MM/dd").format(LocalDateTime.now()));
+    //    hard coded url for menus at different locations, menus may only be possible for chase and lenoir
+//    alpine-bagel
+//    top-of-lenoir
+//    chase
+    public GetMenus() throws IOException {
+        this("chase", DateTimeFormatter.ofPattern("yyyy/MM/dd").format(LocalDateTime.now()));
     }
 
-    public GetMenus(boolean chase) throws IOException {
+    public GetMenus(String diningLocation, String date) throws IOException {
+        if (diningLocation.equals("chase")) {
+            this.location = "chase";
+//            https://dining.unc.edu/locations/chase/?date=2021-10-10
+//            https://dining.unc.edu/locations/alpine-bagel/?date=2021-10-10
+//            https://dining.unc.edu/locations/top-of-lenoir/?date=2021-10-10
+        } else {
+            this.location = "chase";
+        }
         this.date = date;
         this.url = MessageFormat.format(
-                "https://dining.unc.edu/menu-hours/?date={0}", date);
+                "https://dining.unc.edu/locations/{1}/?date={0}", date, location);
 
+//        sets up our scrapable object
         HttpClient client = HttpClientBuilder.create().build();
         RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(1000)
                 .setConnectTimeout(1000).setSocketTimeout(1000).build();
-
         HttpGet get = new HttpGet(url);
         get.setConfig(requestConfig);
         HttpResponse response = client.execute(get);
-
         String content = new BufferedReader(new InputStreamReader(response.getEntity().getContent())).lines().parallel()
                 .collect(Collectors.joining("\n"));
-
         Document doc = Jsoup.parse(content, "", Parser.xmlParser());
-        Elements groups = doc.getElementsByClass("location-group-wrap");
+
+//      should use key = meal period, secondkey = station, value = list of meals
         HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>> map = new HashMap<>();
 
-        for (Element group : groups) {
-            Elements venue = group.getElementsByClass("location-venue-name");
-            Elements restaurants = group.getElementsByClass("open-now-location-link");
-            Elements hours = group.getElementsByClass("hours-info");
-            map.put(venue.text(), new HashMap<>());
-            this.venues.add(venue.text());
 
-            ArrayList<String> keys = new ArrayList<>();
+        Elements openStations = doc.getElementsByClass("c-tab");
+//        this works, we are able to access active data
+//        Elements mealPeriods = doc.getElementsByClass("c-tabs-nav__link is-active");
+        Elements mealPeriods = doc.getElementsByClass("c-tabs-nav__link");
 
-            for (Element restaurant : restaurants) {
-                this.restaurants.add(restaurant.text());
+//      gets the meal periods for this venue
+        for (Element mealPeriod : mealPeriods) {
+            Elements mealPeriodName = mealPeriod.getElementsByClass("c-tabs-nav__link-inner");
+//            System.out.println(mealPeriodName.text());
+//            System.out.println(venue);
+//            System.out.println("done");
+        }
 
-                map.get(venue.text()).put(restaurant.text(), new ArrayList<>());
-                keys.add(restaurant.text());
-            }
-            int i = 0;
-            for (Element times : hours) {
-                ArrayList<String> name_open_close = new ArrayList<>();
-                ArrayList<ArrayList<String>> hr_info = new ArrayList<>();
-                Elements time_info = times.getElementsByTag("span");
+//      gets the stations open during different meal periods for this venue
+        for (Element station : openStations) {
+//            System.out.println(station.text());
 
-//              makes list of meal times at one location
-                for (Element info : time_info) {
-                    name_open_close.add(info.text());
-                    if (name_open_close.size() == 3) {
-                        map.get(venue.text()).get(keys.get(i)).add(name_open_close);
-                        name_open_close = new ArrayList<String>();
-                    }
+            System.out.println(" ");
+
+            Elements allStation = station.getElementsByClass("menu-station");
+
+//            System.out.println(entireStation);
+//            System.out.println(station);
+//            System.out.println(stationName);
+
+//          prints stations for the 6 differnt meal times and the dishes they currently have
+            for (Element thing : allStation) {
+                Elements stationNames = thing.select("h4");
+                Elements dishNames = thing.select("a");
+                System.out.println(" ");
+                System.out.println(stationNames.text());
+                System.out.println(" ");
+
+                for (Element dish : dishNames){
+                    System.out.println(dish.text());
                 }
-                i += 1;
             }
+            System.out.println(" ");
+
         }
-        this.json = new JSONObject(map);
-        this.map = map;
-    }
 
-    public ArrayList<String> getVenueLocations(String venue) {
-        ArrayList<String> locations = new ArrayList<String>();
-        for (String key : map.get(venue).keySet()) {
-            locations.add(key);
-        }
-        return locations;
-    }
-
-    public ArrayList<ArrayList<String>> getVenueLocationHours(String venue, String location) {
-        ArrayList<ArrayList<String>> hours = new ArrayList<ArrayList<String>>();
-        for (ArrayList<String> hour : map.get(venue).get(location)) {
-            hours.add(hour);
-        }
-        return hours;
-    }
-
-    public ArrayList<String> getVenues() {
-        return new ArrayList<String>(venues);
-    }
-
-    public ArrayList<String> getlocations() {
-        return new ArrayList<String>(restaurants);
     }
 }
+
 
