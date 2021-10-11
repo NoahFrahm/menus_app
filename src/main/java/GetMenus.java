@@ -3,6 +3,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,9 +24,9 @@ public class GetMenus {
 
     private final String date;
     private final String location;
-    //    private final JSONObject json;
+    private final JSONObject json;
     private final String url;
-    HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>> map = new HashMap<>();
+    HashMap<String, HashMap<String, ArrayList<String>>> data = new HashMap<>();
 //    HashMap<String, ArrayList<ArrayList<String>> stationsDishes = new HashMap<>();
 
     private ArrayList<String> mealPeriods = new ArrayList<>();
@@ -65,7 +66,7 @@ public class GetMenus {
         Document doc = Jsoup.parse(content, "", Parser.xmlParser());
 
 //      should use key = meal period, secondkey = station, value = list of meals
-        HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>> map = new HashMap<>();
+        HashMap<String, HashMap<String, ArrayList<String>>> map = new HashMap<>();
 
 
         Elements openStations = doc.getElementsByClass("c-tab");
@@ -77,14 +78,12 @@ public class GetMenus {
         for (Element mealPeriod : mealPeriodss) {
             Elements mealPeriodName = mealPeriod.getElementsByClass("c-tabs-nav__link-inner");
             mealPeriods.add(mealPeriodName.text());
-//            System.out.println(mealPeriodName.text());
-//            System.out.println(venue);
-//            System.out.println("done");
         }
 
+
 //      gets the stations open during different meal periods for this venue
+        int i = 0;
         for (Element station : openStations) {
-            System.out.println(" ");
             Elements allStation = station.getElementsByClass("menu-station");
 
 //          prints stations for the 6 differnt meal times and the dishes they currently have
@@ -92,18 +91,27 @@ public class GetMenus {
             for (Element thing : allStation) {
                 Elements stationNames = thing.select("h4");
                 Elements dishNames = thing.select("a");
-//                System.out.println(" ");
-//                System.out.println(stationNames.text());
                 stationsDishes.put(stationNames.text(),new ArrayList<String>());
-//                System.out.println(" ");
 
                 for (Element dish : dishNames) {
                     stationsDishes.get(stationNames.text()).add(dish.text());
-//                    System.out.println(dish.text());
                 }
             }
-            System.out.println(stationsDishes);
+            map.put(mealPeriods.get(i), stationsDishes);
+            i+=1;
+        }
+//        System.out.println(map);
+        this.json = new JSONObject(map);
+        this.data = map;
+
+//        prints map in formatted version
+        for (String melp : map.keySet()){
             System.out.println(" ");
+            System.out.println(melp);
+            for (String sati : map.get(melp).keySet()) {
+                System.out.println(sati);
+                System.out.println(map.get(melp).get(sati));
+            }
         }
     }
 }
