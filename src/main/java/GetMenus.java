@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class GetMenus {
@@ -111,13 +112,24 @@ public class GetMenus {
         }
     }
 
-//    public ArrayList<String> getStations() {
-//        ArrayList<String> openStations = new ArrayList<>();
-//        for (String key : data.keySet()) {
-//            openStations.add(key);
-//        }
-//        return openStations;
-//    }
+    public HashMap<String, HashMap<String, ArrayList<Boolean>>> isOnMenu(String menuItem) {
+//        returns list of meal periods where menu item is present, and stations it is at
+//        hashmap of first key = meal period, second key = station, value = boolean not important
+        HashMap<String, HashMap<String, ArrayList<Boolean>>> presence = new HashMap<String, HashMap<String, ArrayList<Boolean>>>();
+        for (String period : data.keySet()) {
+            for (String station : data.get(period).keySet()){
+                ArrayList<Boolean> thisStationDishes = new ArrayList<>();
+                for(String dish : data.get(period).get(station)){
+                    if (dish.equals(menuItem)){
+                        thisStationDishes.add(true);
+                        presence.put(period, null);
+                        presence.get(period).put(station, thisStationDishes);
+                    }
+                }
+            }
+        }
+        return presence;
+    }
 
     public ArrayList<String> getMealPeriods() {
 //        get all meal periods
