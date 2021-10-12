@@ -40,13 +40,27 @@ public class GetMenus {
     }
 
     public GetMenus(String diningLocation, String date) throws IOException {
-        if (diningLocation.equals("chase")) {
-            this.location = "chase";
-//            https://dining.unc.edu/locations/chase/?date=2021-10-10
-//            https://dining.unc.edu/locations/alpine-bagel/?date=2021-10-10
-//            https://dining.unc.edu/locations/top-of-lenoir/?date=2021-10-10
-        } else {
-            this.location = "chase";
+//        if (diningLocation.equals("chase")) {
+//            this.location = "chase";
+////            https://dining.unc.edu/locations/chase/?date=2021-10-10
+////            https://dining.unc.edu/locations/alpine-bagel/?date=2021-10-10
+////            https://dining.unc.edu/locations/top-of-lenoir/?date=2021-10-10
+//        } else {
+//            this.location = "chase";
+//        }
+        String loc = diningLocation;
+        switch (loc) {
+            case "chase":
+                this.location = "chase";
+                break;
+            case "alpine-bagel":
+                this.location = "alpine-bagel";
+                break;
+            case "top-of-lenoir":
+                this.location = "top-of-lenoir";
+                break;
+            default:
+                this.location = "chase";
         }
         this.date = date;
         this.url = MessageFormat.format(
