@@ -39,6 +39,10 @@ public class GetMenus {
         this("chase", DateTimeFormatter.ofPattern("yyyy/MM/dd").format(LocalDateTime.now()));
     }
 
+    public GetMenus(String diningLocation) throws IOException {
+        this(diningLocation, DateTimeFormatter.ofPattern("yyyy/MM/dd").format(LocalDateTime.now()));
+    }
+
     public GetMenus(String diningLocation, String date) throws IOException {
 //        if (diningLocation.equals("chase")) {
 //            this.location = "chase";
