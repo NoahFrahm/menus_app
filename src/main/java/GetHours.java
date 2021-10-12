@@ -116,5 +116,10 @@ public class GetHours {
 //        get locations that are open
         return new ArrayList<String>(restaurants);
     }
+
+    public JSONObject getJson(){
+//        get json object of this scraped data
+        return new JSONObject(this.map);
+    }
 }
 

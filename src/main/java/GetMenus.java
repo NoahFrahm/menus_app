@@ -168,4 +168,9 @@ public class GetMenus {
         ArrayList<String> dishes = new ArrayList<>(data.get(mealPeriod).get(station));
         return dishes;
     }
+
+    public JSONObject getJson(){
+//        gets json object of scraped data
+        return new JSONObject(this.data);
+    }
 }
