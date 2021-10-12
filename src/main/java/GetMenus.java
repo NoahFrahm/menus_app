@@ -117,17 +117,17 @@ public class GetMenus {
         this.json = new JSONObject(map);
         this.data = map;
 
-//        prints map in formatted version
-        for (String melp : map.keySet()) {
-            System.out.println(" ");
-            System.out.println(melp);
-
-            for (String sati : map.get(melp).keySet()) {
-                System.out.println(" ");
-                System.out.println(sati);
-                System.out.println(map.get(melp).get(sati));
-            }
-        }
+////        prints map in formatted version
+//        for (String melp : map.keySet()) {
+//            System.out.println(" ");
+//            System.out.println(melp);
+//
+//            for (String sati : map.get(melp).keySet()) {
+//                System.out.println(" ");
+//                System.out.println(sati);
+//                System.out.println(map.get(melp).get(sati));
+//            }
+//        }
     }
 
     public HashMap<String, HashMap<String, ArrayList<Boolean>>> isOnMenu(String menuItem) {
