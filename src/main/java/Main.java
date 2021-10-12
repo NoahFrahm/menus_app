@@ -6,5 +6,3 @@ public class Main {
 //        GetHours todays_hours = new GetHours();
     }
 }
-
-

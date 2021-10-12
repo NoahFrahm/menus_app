@@ -90,6 +90,7 @@ public class GetHours {
     }
 
     public ArrayList<String> getVenueLocations(String venue) {
+//        get locations at specific venue
         ArrayList<String> locations = new ArrayList<String>();
         for (String key : map.get(venue).keySet()) {
             locations.add(key);
@@ -98,6 +99,7 @@ public class GetHours {
     }
 
     public ArrayList<ArrayList<String>> getVenueLocationHours(String venue, String location) {
+//        get hours of locations at a specific venue
         ArrayList<ArrayList<String>> hours = new ArrayList<ArrayList<String>>();
         for (ArrayList<String> hour : map.get(venue).get(location)) {
             hours.add(hour);
@@ -106,10 +108,12 @@ public class GetHours {
     }
 
     public ArrayList<String> getVenues() {
+//        get venues that are open
         return new ArrayList<String>(venues);
     }
 
     public ArrayList<String> getlocations() {
+//        get locations that are open
         return new ArrayList<String>(restaurants);
     }
 }

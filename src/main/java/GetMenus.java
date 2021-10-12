@@ -27,11 +27,8 @@ public class GetMenus {
     private final JSONObject json;
     private final String url;
     HashMap<String, HashMap<String, ArrayList<String>>> data = new HashMap<>();
-//    HashMap<String, ArrayList<ArrayList<String>> stationsDishes = new HashMap<>();
-
     private ArrayList<String> mealPeriods = new ArrayList<>();
-    //    make hashmap to store all unique stations
-    private ArrayList<String> openStations = new ArrayList<>();
+//    private ArrayList<String> openStations = new ArrayList<>();
 
     //    hard coded url for menus at different locations, menus may only be possible for chase and lenoir
 //    alpine-bagel
@@ -54,7 +51,7 @@ public class GetMenus {
         this.url = MessageFormat.format(
                 "https://dining.unc.edu/locations/{1}/?date={0}", date, location);
 
-//        sets up our scrapable object
+//      sets up our scrapable object
         HttpClient client = HttpClientBuilder.create().build();
         RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(1000)
                 .setConnectTimeout(1000).setSocketTimeout(1000).build();
@@ -68,7 +65,6 @@ public class GetMenus {
 //      should use key = meal period, secondkey = station, value = list of meals
         HashMap<String, HashMap<String, ArrayList<String>>> map = new HashMap<>();
 
-
         Elements openStations = doc.getElementsByClass("c-tab");
 //        this works, we are able to access active data
 //        Elements mealPeriods = doc.getElementsByClass("c-tabs-nav__link is-active");
@@ -80,7 +76,6 @@ public class GetMenus {
             mealPeriods.add(mealPeriodName.text());
         }
 
-
 //      gets the stations open during different meal periods for this venue
         int i = 0;
         for (Element station : openStations) {
@@ -91,29 +86,56 @@ public class GetMenus {
             for (Element thing : allStation) {
                 Elements stationNames = thing.select("h4");
                 Elements dishNames = thing.select("a");
-                stationsDishes.put(stationNames.text(),new ArrayList<String>());
+                stationsDishes.put(stationNames.text(), new ArrayList<String>());
 
                 for (Element dish : dishNames) {
                     stationsDishes.get(stationNames.text()).add(dish.text());
                 }
             }
             map.put(mealPeriods.get(i), stationsDishes);
-            i+=1;
+            i += 1;
         }
-//        System.out.println(map);
         this.json = new JSONObject(map);
         this.data = map;
 
 //        prints map in formatted version
-        for (String melp : map.keySet()){
+        for (String melp : map.keySet()) {
             System.out.println(" ");
             System.out.println(melp);
+
             for (String sati : map.get(melp).keySet()) {
+                System.out.println(" ");
                 System.out.println(sati);
                 System.out.println(map.get(melp).get(sati));
             }
         }
     }
+
+//    public ArrayList<String> getStations() {
+//        ArrayList<String> openStations = new ArrayList<>();
+//        for (String key : data.keySet()) {
+//            openStations.add(key);
+//        }
+//        return openStations;
+//    }
+
+    public ArrayList<String> getMealPeriods() {
+//        get all meal periods
+        return new ArrayList<String>(mealPeriods);
+    }
+
+    public ArrayList<String> getStationsDuringPeriod(String mealPeriod) {
+//        gets all stations open during the specified meal period
+        ArrayList<String> openStations = new ArrayList<>();
+        for (String key : data.get(mealPeriod).keySet()) {
+            openStations.add(key);
+        }
+        return openStations;
+    }
+
+    public ArrayList<String> getMealsDuringPeriodAtStation(String mealPeriod, String station) {
+//        gets all dishes served at the specified station during the specified meal period
+        ArrayList<String> dishes = new ArrayList<>(data.get(mealPeriod).get(station));
+        return dishes;
+    }
 }
-
-
