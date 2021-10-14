@@ -1,3 +1,4 @@
+import com.google.firebase.database.FirebaseDatabase;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -18,7 +19,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class GetMenus {
@@ -173,4 +173,12 @@ public class GetMenus {
 //        gets json object of scraped data
         return new JSONObject(this.data);
     }
+
+//    public void pushToFireBase(){
+//        FirebaseDatabase f = FirebaseDatabase.getInstance("https://menu-app-1bc31-default-rtdb.firebaseio.com/");
+////        f.getApp();
+//        System.out.println(f.getApp());
+//        FirebaseDatabase.getInstance("https://menu-app-1bc31-default-rtdb.firebaseio.com/")
+//        FirebaseDatabase f  = FirebaseDatabase.getInstance("efvwev");
+//    }
 }
