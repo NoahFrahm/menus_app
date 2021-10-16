@@ -121,5 +121,10 @@ public class GetHours {
 //        get json object of this scraped data
         return new JSONObject(this.map);
     }
+
+    public HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>> getData(){
+//        get json object of this scraped data
+        return new HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>>(this.map);
+    }
 }
 

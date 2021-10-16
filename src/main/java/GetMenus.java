@@ -154,6 +154,12 @@ public class GetMenus {
         return new ArrayList<String>(mealPeriods);
     }
 
+    public HashMap<String, HashMap<String, ArrayList<String>>> getData() {
+//        get all meal periods
+        return new HashMap<String, HashMap<String, ArrayList<String>>>(data);
+    }
+
+
     public ArrayList<String> getStationsDuringPeriod(String mealPeriod) {
 //        gets all stations open during the specified meal period
         ArrayList<String> openStations = new ArrayList<>();
