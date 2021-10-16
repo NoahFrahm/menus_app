@@ -8,6 +8,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -16,9 +17,26 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class FirebasePushFunctions {
-    private Firestore db;
+//    private Firestore db;
 
     public void FirebasePushFunctions() throws IOException {
+//        InputStream serviceAccount = new FileInputStream("/Users/noahfrahm/Library/Mobile Documents" +
+//                "/com~apple~CloudDocs/VScode workspaces/menus_app/menu-app-1bc31-" +
+//                "firebase-adminsdk-55ja5-02744579fd.json");
+//        GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+//        FirebaseOptions options = new FirebaseOptions.Builder()
+//                .setCredentials(credentials)
+//                .build();
+//        FirebaseApp.initializeApp(options);
+//        this.db = FirestoreClient.getFirestore();
+    }
+
+    public void pushFullMenus(ArrayList<String> locations, int infoAmount) throws InterruptedException, ExecutionException, IOException {
+//        this will push full menu for lenoir,chase,alpine
+        ArrayList<String> namedLoc = new ArrayList<>(List.of("chase", "top-of-lenoir", "alpine-bagel"));
+//        ArrayList<String> namedLoc = new ArrayList<>(locations);
+        int infosize = infoAmount;
+
         InputStream serviceAccount = new FileInputStream("/Users/noahfrahm/Library/Mobile Documents" +
                 "/com~apple~CloudDocs/VScode workspaces/menus_app/menu-app-1bc31-" +
                 "firebase-adminsdk-55ja5-02744579fd.json");
@@ -27,15 +45,7 @@ public class FirebasePushFunctions {
                 .setCredentials(credentials)
                 .build();
         FirebaseApp.initializeApp(options);
-        this.db = FirestoreClient.getFirestore();
-
-    }
-
-    public void pushFullMenus(ArrayList<String> locations, int infoAmount) throws InterruptedException, ExecutionException {
-//        this will push full menu for lenoir,chase,alpine
-        ArrayList<String> namedLoc = new ArrayList<>(List.of("chase", "top-of-lenoir", "alpine-bagel"));
-//        ArrayList<String> namedLoc = new ArrayList<>(locations);
-        int infosize = infoAmount;
+        Firestore db = FirestoreClient.getFirestore();
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         DateFormat keyFormat = new SimpleDateFormat("yyyyMMdd");
@@ -94,6 +104,16 @@ public class FirebasePushFunctions {
 //        this will push a list of full hours for locations open each day
         int infosize = infoAmount;
 
+        InputStream serviceAccount = new FileInputStream("/Users/noahfrahm/Library/Mobile Documents" +
+                "/com~apple~CloudDocs/VScode workspaces/menus_app/menu-app-1bc31-" +
+                "firebase-adminsdk-55ja5-02744579fd.json");
+        GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setCredentials(credentials)
+                .build();
+        FirebaseApp.initializeApp(options);
+        Firestore db = FirestoreClient.getFirestore();
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         DateFormat keyFormat = new SimpleDateFormat("yyyyMMdd");
 
@@ -109,7 +129,7 @@ public class FirebasePushFunctions {
 
             System.out.println(fetchDate);
 //            HashMap<String, HashMap<String, ArrayList<String>>> info = new HashMap<String, HashMap<String, ArrayList<String>>>();
-            HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>> info = new HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>>();
+            HashMap<String, HashMap<String, HashMap<String, ArrayList<String>>>> info = new HashMap<>();
             int maxErrors = 5;
 
             Thread.sleep(1000);

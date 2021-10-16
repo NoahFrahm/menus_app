@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class GetHours {
@@ -25,7 +26,7 @@ public class GetHours {
     private final String date;
     private final JSONObject json;
     private final String url;
-    HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>> map = new HashMap<>();
+    HashMap<String, HashMap<String, HashMap<String, ArrayList<String>>>> map = new HashMap<>();
     private ArrayList<String> venues = new ArrayList<>();
     private ArrayList<String> restaurants = new ArrayList<>();
 
@@ -51,7 +52,7 @@ public class GetHours {
 
         Document doc = Jsoup.parse(content, "", Parser.xmlParser());
         Elements groups = doc.getElementsByClass("location-group-wrap");
-        HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>> map = new HashMap<>();
+        HashMap<String, HashMap<String, HashMap<String,ArrayList<String>>>> map = new HashMap<>();
 
         for (Element group : groups) {
             Elements venue = group.getElementsByClass("location-venue-name");
@@ -65,7 +66,7 @@ public class GetHours {
             for (Element restaurant : restaurants) {
                 this.restaurants.add(restaurant.text());
 
-                map.get(venue.text()).put(restaurant.text(), new ArrayList<>());
+                map.get(venue.text()).put(restaurant.text(), new HashMap<>());
                 keys.add(restaurant.text());
             }
             int i = 0;
@@ -78,7 +79,8 @@ public class GetHours {
                 for (Element info : time_info) {
                     name_open_close.add(info.text());
                     if (name_open_close.size() == 3) {
-                        map.get(venue.text()).get(keys.get(i)).add(name_open_close);
+                        ArrayList<String> startEnd = new ArrayList<>(List.of(name_open_close.get(1), name_open_close.get(2)));
+                        map.get(venue.text()).get(keys.get(i)).put(name_open_close.get(0),startEnd);
                         name_open_close = new ArrayList<String>();
                     }
                 }
@@ -98,11 +100,16 @@ public class GetHours {
         return locations;
     }
 
-    public ArrayList<ArrayList<String>> getVenueLocationHours(String venue, String location) {
+    public HashMap<String, ArrayList<String>> getVenueLocationHours(String venue, String location) {
 //        get hours of locations at a specific venue
-        ArrayList<ArrayList<String>> hours = new ArrayList<ArrayList<String>>();
-        for (ArrayList<String> hour : map.get(venue).get(location)) {
-            hours.add(hour);
+//        ArrayList<ArrayList<String>> hours = new ArrayList<ArrayList<String>>();
+        HashMap<String, ArrayList<String>> hours = new HashMap<>();
+        for (String hourset : map.get(venue).get(location).keySet()) {
+//            System.out.println(hourset);
+            hours.put(hourset, new ArrayList<>());
+            for(String startEnd : map.get(venue).get(location).get(hourset)){
+                hours.get(hourset).add(startEnd);
+            }
         }
         return hours;
     }
@@ -122,9 +129,9 @@ public class GetHours {
         return new JSONObject(this.map);
     }
 
-    public HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>> getData(){
+    public HashMap<String, HashMap<String, HashMap<String, ArrayList<String>>>> getData(){
 //        get json object of this scraped data
-        return new HashMap<String, HashMap<String, ArrayList<ArrayList<String>>>>(this.map);
+        return new HashMap<String, HashMap<String, HashMap<String, ArrayList<String>>>>(this.map);
     }
 }
 
