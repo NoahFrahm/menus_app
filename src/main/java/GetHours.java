@@ -79,8 +79,14 @@ public class GetHours {
                 for (Element info : time_info) {
                     name_open_close.add(info.text());
                     if (name_open_close.size() == 3) {
+//                        System.out.println(name_open_close.get(0).isEmpty());
                         ArrayList<String> startEnd = new ArrayList<>(List.of(name_open_close.get(1), name_open_close.get(2)));
+                        if (name_open_close.get(0).isEmpty()){
+                            map.get(venue.text()).get(keys.get(i)).put("Open",startEnd);
+                        }
+                        else{
                         map.get(venue.text()).get(keys.get(i)).put(name_open_close.get(0),startEnd);
+                    }
                         name_open_close = new ArrayList<String>();
                     }
                 }

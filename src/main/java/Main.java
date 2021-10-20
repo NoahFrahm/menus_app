@@ -4,9 +4,24 @@ import java.util.concurrent.ExecutionException;
 public class Main {
     public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
         FirebasePushFunctions push = new FirebasePushFunctions();
-//        GetHours hours = new GetHours();
-        push.pushVenueHours(4);
+        push.pushVenueHours(6);
 
+//        build function to delete x first entries while also ensuring that data amount is not below y
+//        ie we delete the first 13 entries after adding 25 entries to our existing 18 in order to keep entries at
+//        minimum to 30 but also to clean up and tuck away old data
+
+//        use get venues to adjust for the empty dictionary here
+//        push.pushFullMenus(6);
+
+//        GetMenus menus = new GetMenus("chase", "2021/09/27");
+//        GetMenus menus2 = new GetMenus("top-of-lenoir", "2021/09/27");
+//        GetMenus menus3 = new GetMenus("alpine-bagel", "2021/09/27");
+
+//        GetHours hours = new GetHours();
+//        System.out.println(menus.getData());
+//        System.out.println(hours.getData());
+
+//        push.pushVenueHours(4);
     }
 }
 

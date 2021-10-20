@@ -31,7 +31,8 @@ public class FirebasePushFunctions {
 //        this.db = FirestoreClient.getFirestore();
     }
 
-    public void pushFullMenus(ArrayList<String> locations, int infoAmount) throws InterruptedException, ExecutionException, IOException {
+    public void pushFullMenus(int infoAmount) throws InterruptedException, ExecutionException, IOException {
+//        ArrayList<String> locations
 //        this will push full menu for lenoir,chase,alpine
         ArrayList<String> namedLoc = new ArrayList<>(List.of("chase", "top-of-lenoir", "alpine-bagel"));
 //        ArrayList<String> namedLoc = new ArrayList<>(locations);
@@ -142,6 +143,7 @@ public class FirebasePushFunctions {
                     System.out.println(j);
                 }
             }
+
             DocumentReference docRef = db.collection("Daily Hours").document(keyDate);
             ApiFuture<WriteResult> result = docRef.set(info);
             System.out.println("Update time : " + result.get().getUpdateTime());
