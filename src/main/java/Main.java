@@ -4,7 +4,11 @@ import java.util.concurrent.ExecutionException;
 public class Main {
     public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
         FirebasePushFunctions push = new FirebasePushFunctions();
-        push.pushVenueHours(6);
+//        push.pushVenueHours(6);
+//        push.pushFullMenus(6);
+//        push.hoursTwoCleanup();
+        push.hoursCleanup();
+
 
 //        build function to delete x first entries while also ensuring that data amount is not below y
 //        ie we delete the first 13 entries after adding 25 entries to our existing 18 in order to keep entries at
