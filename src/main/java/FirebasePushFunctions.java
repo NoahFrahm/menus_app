@@ -97,13 +97,15 @@ public class FirebasePushFunctions {
             System.out.println("Update time : " + result.get().getUpdateTime());
         }
     }
-//    push venue hours in x days with y amount
+
+    //    push venue hours in x days with y amount
 //    push menus in x days with y amount
 
-    public void pushVenueHours(int infoAmount) throws IOException, InterruptedException, ExecutionException {
+    public void pushVenueHours(int infoAmount, Date data) throws IOException, InterruptedException, ExecutionException {
 //        this will push a list of full hours for locations open each day
         int infosize = infoAmount;
 
+//        code for firestore setup
         InputStream serviceAccount = new FileInputStream("/Users/noahfrahm/Library/Mobile Documents" +
                 "/com~apple~CloudDocs/VScode workspaces/menus_app/menu-app-1bc31-" +
                 "firebase-adminsdk-55ja5-02744579fd.json");
@@ -114,22 +116,24 @@ public class FirebasePushFunctions {
         FirebaseApp.initializeApp(options);
         Firestore db = FirestoreClient.getFirestore();
 
+//        code for date formats
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         DateFormat keyFormat = new SimpleDateFormat("yyyyMMdd");
 
-        Date curDate = new Date();
+        Date curDate = data;
         Calendar cal = Calendar.getInstance();
         cal.setTime(curDate);
 
         for (int i = 1; i <= infosize; i++) {
 //            add if so we can fetch current date, implement smart popping later
             int days = 1;
-            cal.add(Calendar.DATE, days);
+            if (i != 1) {
+                cal.add(Calendar.DATE, days);
+            }
             String fetchDate = dateFormat.format(cal.getTime());
             String keyDate = keyFormat.format(cal.getTime());
 
             System.out.println(fetchDate);
-//            HashMap<String, HashMap<String, ArrayList<String>>> info = new HashMap<String, HashMap<String, ArrayList<String>>>();
             HashMap<String, HashMap<String, HashMap<String, ArrayList<String>>>> info = new HashMap<>();
             int maxErrors = 5;
 
@@ -149,7 +153,13 @@ public class FirebasePushFunctions {
         }
     }
 
+    public void pushVenueHours(int infoAmount) throws IOException, ExecutionException, InterruptedException {
+        pushVenueHours(infoAmount, new Date());
+    }
+
+
     public void hoursCleanup() throws IOException, ExecutionException, InterruptedException {
+
         InputStream serviceAccount = new FileInputStream("/Users/noahfrahm/Library/Mobile Documents" +
                 "/com~apple~CloudDocs/VScode workspaces/menus_app/menu-app-1bc31-" +
                 "firebase-adminsdk-55ja5-02744579fd.json");
@@ -167,15 +177,18 @@ public class FirebasePushFunctions {
         System.out.println(docNum);
 
         int mindata = 10;
-        if (docNum > mindata) {
-            Date curDate = new Date();
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(curDate);
-            DateFormat keyFormat = new SimpleDateFormat("yyyyMMdd");
-            String keyDate = keyFormat.format(cal.getTime());
+        Date curDate = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(curDate);
+        DateFormat keyFormat = new SimpleDateFormat("yyyyMMdd");
+        String keyDate = keyFormat.format(cal.getTime());
+//        System.out.println(keyDate);
 
+        if (!documents.isEmpty()) {
             for (QueryDocumentSnapshot doc : documents) {
                 System.out.println(doc.getId());
+                System.out.println(keyDate);
+
                 if (!doc.getId().equals(keyDate)) {
                     ApiFuture<WriteResult> writeResult = db.collection("Daily Hours").document(doc.getId()).delete();
                     System.out.println("Update time : " + writeResult.get().getUpdateTime());
@@ -185,19 +198,24 @@ public class FirebasePushFunctions {
                 }
             }
         }
+
+
         CollectionReference docRefpost = db.collection("Daily Hours");
         ApiFuture<QuerySnapshot> resultPost = docRefpost.get();
         List<QueryDocumentSnapshot> documentspost = resultPost.get().getDocuments();
         int docNumpost = documentspost.size();
+        System.out.println("before: " + docNum + " after: " + docNumpost + " min: " + mindata);
+
 
         if (docNumpost < mindata) {
-            while (docNumpost != mindata){
+            Date datum = new Date();
+            Calendar newCal = Calendar.getInstance();
+            cal.setTime(datum);
+            int days = docNumpost;
+            cal.add(Calendar.DATE, days);
+            System.out.println(cal.getTime());
+            pushVenueHours(mindata - docNumpost, cal.getTime());
 
-//                DocumentReference docu = db.collection("Daily Hours").document(keyDate);
-//                ApiFuture<WriteResult> res = docu.set(info);
-//                System.out.println("Update time : " + res.get().getUpdateTime());
-                docNum += 1;
-                }
         }
     }
 
@@ -240,7 +258,7 @@ public class FirebasePushFunctions {
             for (QueryDocumentSnapshot doc : documents) {
                 System.out.println(doc.getId());
 //                System.out.println(keyDate);
-                if(doc.getId().equals(keyDate)){
+                if (doc.getId().equals(keyDate)) {
                     System.out.println(keyDate);
                     System.out.println("yes this is today");
                 }

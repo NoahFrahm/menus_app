@@ -16,12 +16,12 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.14.2</version>
+            <version>1.14.3</version>
         </dependency>
         <dependency>
             <groupId>org.mortbay.jetty</groupId>
             <artifactId>jetty-util</artifactId>
-            <version>6.1.25</version>
+            <version>6.1.26</version>
         </dependency>
 
 <!--added this dependency for firebase method, error prone?-->
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20180130</version>
+            <version>20210307</version>
         </dependency>
 
     </dependencies>

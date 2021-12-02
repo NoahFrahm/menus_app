@@ -1,13 +1,17 @@
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 public class Main {
     public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
         FirebasePushFunctions push = new FirebasePushFunctions();
-//        push.pushVenueHours(6);
+        Date datum = new Date();
+//        System.out.println(datum);
+
+        push.pushVenueHours(6, datum);
 //        push.pushFullMenus(6);
 //        push.hoursTwoCleanup();
-        push.hoursCleanup();
+//        push.hoursCleanup();
 
 
 //        build function to delete x first entries while also ensuring that data amount is not below y
