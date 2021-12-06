@@ -7,8 +7,9 @@ public class Main {
         FirebasePushFunctions push = new FirebasePushFunctions();
         Date datum = new Date();
 //        System.out.println(datum);
+//        push.pushVenueHours(6, datum);
+        push.hoursCleanup();
 
-        push.pushVenueHours(6, datum);
 //        push.pushFullMenus(6);
 //        push.hoursTwoCleanup();
 //        push.hoursCleanup();
@@ -30,33 +31,14 @@ public class Main {
 //        System.out.println(hours.getData());
 
 //        push.pushVenueHours(4);
+
     }
 }
 
 //        GetMenus menus = new GetMenus("chase", "2021/09/27");
 //        System.out.println(menus.getMealsDuringPeriodAtStation("Dinner (5pm-8pm)", "The Griddle"));
 
-// Use the application default credentials
-// Use a service account
-//        InputStream serviceAccount = new FileInputStream("/Users/noahfrahm/Library/Mobile Documents" +
-//                "/com~apple~CloudDocs/VScode workspaces/menus_app/menu-app-1bc31-" +
-//                "firebase-adminsdk-55ja5-02744579fd.json");
-//        GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
-//        FirebaseOptions options = new FirebaseOptions.Builder()
-//                .setCredentials(credentials)
-//                .build();
-//        FirebaseApp.initializeApp(options);
-//        Firestore db = FirestoreClient.getFirestore();
-//
-//        DocumentReference docRef = db.collection("users").document("1");
-////        DateTimeFormatter.ofPattern("yyyy/MM/dd").format(LocalDateTime.now()
-//        // Add document data  with id "alovelace" using a hashmap
-////        Map<String, Object> data = new HashMap<>();
-////        data.put("first", "Ada");
-////        data.put("last", "Lovelace");
-////        data.put("born", 185);
-//        //asynchronously write data
-//        ApiFuture<WriteResult> result = docRef.set(info);
+
 //
 //        // result.get() blocks on response
 //        System.out.println("Update time : " + result.get().getUpdateTime());
