@@ -8,7 +8,7 @@ public class Main {
         Date datum = new Date();
 //        System.out.println(datum);
 //        push.pushVenueHours(6, datum);
-        push.hoursCleanup();
+        push.hoursCleanup(true);
 
 //        push.pushFullMenus(6);
 //        push.hoursTwoCleanup();
