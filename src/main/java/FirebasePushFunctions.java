@@ -159,7 +159,7 @@ public class FirebasePushFunctions {
 
 
     public void hoursCleanup(boolean hours) throws IOException, ExecutionException, InterruptedException {
-        String collectionName = hours ? "Daily Hours" : "Daily Menus";
+        String collectionName = hours ? "Daily Hours" : "Full Menus";
 
         CollectionReference docRef = db.collection(collectionName);
         ApiFuture<QuerySnapshot> result = docRef.get();
@@ -173,13 +173,13 @@ public class FirebasePushFunctions {
         cal.setTime(curDate);
         DateFormat keyFormat = new SimpleDateFormat("yyyyMMdd");
         String keyDate = keyFormat.format(cal.getTime());
-//        System.out.println(keyDate);
 
         if (!documents.isEmpty()) {
             for (QueryDocumentSnapshot doc : documents) {
                 System.out.println(doc.getId());
                 System.out.println(keyDate);
 
+//              for each doc that is not our current date we delete it from collection
                 if (!doc.getId().equals(keyDate)) {
                     ApiFuture<WriteResult> writeResult = db.collection(collectionName).document(doc.getId()).delete();
                     System.out.println("Update time : " + writeResult.get().getUpdateTime());
@@ -195,13 +195,16 @@ public class FirebasePushFunctions {
         ApiFuture<QuerySnapshot> resultPost = docRefpost.get();
         List<QueryDocumentSnapshot> documentspost = resultPost.get().getDocuments();
         int docNumpost = documentspost.size();
-        System.out.println("before: " + docNum + " after: " + docNumpost + " min: " + mindata);
+        System.out.println("before: " + docNum + " after: " + docNumpost + " min: " + mindata + " collection: " + collectionName);
 
 
         if (docNumpost < mindata) {
+//            if we have less docs than the mindata needed
             Date datum = new Date();
             Calendar newCal = Calendar.getInstance();
             cal.setTime(datum);
+//            we start at the data docnum post days after today
+//            because we want to add new data not overwrite what we have already pushed
             int days = docNumpost;
             cal.add(Calendar.DATE, days);
             System.out.println(cal.getTime());
@@ -216,7 +219,6 @@ public class FirebasePushFunctions {
 
         }
     }
-
 }
 
 

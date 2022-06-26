@@ -7,8 +7,10 @@ public class Main {
         FirebasePushFunctions push = new FirebasePushFunctions();
         Date datum = new Date();
 //        System.out.println(datum);
+
+        push.hoursCleanup(false);
 //        push.pushVenueHours(6, datum);
-        push.hoursCleanup(true);
+//        push.hoursCleanup(true);
 
 //        push.pushFullMenus(6);
 //        push.hoursTwoCleanup();

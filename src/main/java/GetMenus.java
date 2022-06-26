@@ -69,7 +69,7 @@ public class GetMenus {
         this.date = date;
         this.url = MessageFormat.format(
                 "https://dining.unc.edu/locations/{1}/?date={0}", date, location);
-
+        System.out.println("todays url: " + this.url);
 //      sets up our scrapable object
         HttpClient client = HttpClientBuilder.create().build();
         RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(1000)

@@ -38,7 +38,7 @@ public class GetHours {
         this.date = date;
         this.url = MessageFormat.format(
                 "https://dining.unc.edu/menu-hours/?date={0}", date);
-
+        System.out.println("todays url: " + this.url);
         HttpClient client = HttpClientBuilder.create().build();
         RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(1000)
                 .setConnectTimeout(1000).setSocketTimeout(1000).build();
